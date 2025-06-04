@@ -2,7 +2,7 @@
   "$schema": "https://dl.viam.dev/module.schema.json",
   "module_id": "ianwhalen-viam:adafruit-2348",
   "visibility": "private",
-  "url": "",
+  "url": "https://github.com/IanWhalen/adafruit-2348",
   "description": "Modular motor component: adafruit-2348",
   "models": [
     {

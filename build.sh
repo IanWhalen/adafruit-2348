@@ -1,9 +1,7 @@
 #!/bin/sh
 cd `dirname $0`
 
-# Create a virtual environment to run our code
-VENV_NAME="venv"
-PYTHON="$VENV_NAME/bin/python"
+PYTHON=".venv/bin/python"
 
 # Install uv if not present
 if ! command -v uv >/dev/null 2>&1; then
@@ -11,16 +9,23 @@ if ! command -v uv >/dev/null 2>&1; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
-# Create venv if it doesn't exist
-if [ ! -d "$VENV_NAME" ]; then
-    echo "Creating virtual environment..."
-    uv venv
+# Optional: Clean up venv on exit (remove if you want to keep venv between runs)
+cleanup() {
+    if [ -d .venv ]; then
+        rm -rf .venv
+        echo "Virtual environment cleaned up"
+    fi
+}
+trap cleanup EXIT
+
+# Fix permissions if venv exists (safety net)
+if [ -d .venv ]; then
+    sudo chown -R "$USER:$USER" .venv
 fi
 
 # Install dependencies using uv
 echo "Installing dependencies..."
-uv pip install -r requirements.txt
-uv pip install pyinstaller
+uv sync
 
 $PYTHON -m PyInstaller --onefile --hidden-import="googleapiclient" src/main.py
 tar -czvf dist/archive.tar.gz ./dist/main
