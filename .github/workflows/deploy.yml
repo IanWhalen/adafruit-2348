@@ -10,11 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: "0.7.11"
-
       - uses: viamrobotics/build-action@v1
         with:
           # note: you can replace this line with 'version: ""' if
